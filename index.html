@@ -142,6 +142,7 @@
     box-shadow:0 20px 40px rgba(0,0,0,0.4);
   }
   .resume-dd:hover .resume-menu, .resume-dd:focus-within .resume-menu{opacity:1; visibility:visible; transform:translateY(0);}
+  .resume-menu.open{opacity:1 !important; visibility:visible !important; transform:translateY(0) !important;}
   .resume-menu a{
     display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:7px;
     font-size:0.86rem; color:var(--text-dim); font-weight:500;
@@ -207,8 +208,8 @@
   h2.section-title{font-family:var(--serif-display); font-size:clamp(1.8rem,3.4vw,2.5rem); font-weight:700; letter-spacing:-0.01em;}
   h2.section-title em{font-style:normal; color:var(--teal);}
   .section-sub{color:var(--text-dim); margin-top:14px; font-size:1.02rem;}
-  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
-  .reveal.in{opacity:1; transform:translateY(0);}
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; pointer-events:none;}
+  .reveal.in{opacity:1; transform:translateY(0); pointer-events:auto;}
 
   hr.rule{border:none; border-top:1px solid var(--border-soft);}
 
@@ -278,6 +279,12 @@
   .proj-metric{font-family:var(--mono); font-size:1.3rem; color:var(--teal); font-weight:600; margin-bottom:4px;}
   .proj-stack{display:flex; flex-wrap:wrap; gap:6px; margin-top:auto;}
   .proj-stack span{font-size:0.7rem; color:var(--text-faint); background:var(--surface-2); padding:4px 9px; border-radius:6px; border:1px solid var(--border-soft);}
+  .proj-live{display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--mono); font-size:0.75rem; font-weight:600;
+    color:#06121A; background:var(--teal); padding:5px 13px;
+    border-radius:6px; text-decoration:none; transition:all 0.2s; letter-spacing:0.03em;}
+  .proj-live:hover{background:#fff; transform:translateY(-1px); box-shadow:0 6px 20px rgba(47,224,196,0.35);}
+  .proj-live svg{width:11px; height:11px; fill:currentColor; flex-shrink:0;}
   @media (max-width:900px){.projects-grid{grid-template-columns:1fr 1fr;}}
   @media (max-width:600px){.projects-grid{grid-template-columns:1fr;}}
 
@@ -298,12 +305,13 @@
   @media (max-width:840px){.edu-grid{grid-template-columns:1fr;}}
 
   /* ---------- CONTACT ---------- */
-  .contact-wrap{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start;}
+  .contact-wrap{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; position:relative; z-index:10;}
   .contact-links{display:flex; flex-direction:column; gap:14px; margin-top:28px;}
   .contact-link{
     display:flex; align-items:center; gap:14px; padding:16px 18px;
     background:var(--surface); border:1px solid var(--border-soft); border-radius:11px;
     transition:border-color .2s, transform .2s;
+    cursor:pointer; pointer-events:auto; position:relative; z-index:12;
   }
   .contact-link:hover{border-color:var(--teal); transform:translateX(6px);}
   .contact-link .ic{font-size:1.15rem; color:var(--teal);}
@@ -321,6 +329,15 @@
     border-radius:9px; cursor:pointer; font-size:0.95rem; transition:transform .18s;
   }
   form.msg button:hover{transform:translateY(-2px);}
+  .form-title{font-family:var(--mono); font-size:0.78rem; color:var(--teal); letter-spacing:0.06em;
+    margin-bottom:4px; font-weight:600;}
+  form.msg select{background:var(--surface-2); border:1px solid var(--border); color:var(--text);
+    border-radius:8px; padding:12px 16px; font-family:inherit; font-size:0.92rem;
+    transition:border-color .2s; cursor:pointer; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%232FE0C4'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 14px center;}
+  form.msg select:focus{border-color:var(--teal); outline:none;}
+  form.msg select option{background:var(--surface);}
   @media (max-width:840px){.contact-wrap{grid-template-columns:1fr;}}
 
   footer{padding:36px 0; border-top:1px solid var(--border-soft);}
@@ -453,25 +470,25 @@
 <section class="hero" id="hero">
   <div class="wrap hero-grid">
     <div class="reveal in">
-      <span class="eyebrow"><span class="dot"></span> Available for opportunities · Immediate Joiner</span>
+      <span class="eyebrow"><span class="dot"></span> Open to Collab · Immediate Joiner</span>
       <h1 class="headline">Er. Maharshi <span class="accent">Shukla.</span></h1>
       <span class="role-line">// Data Scientist &amp; AI Engineer</span>
       <p class="lede">A <strong>strategic team leader transitioning into Data Science and AI Engineering</strong>, bringing 5 years of ownership-driven decision-making in operations and leadership to the discipline of turning data into business outcomes.</p>
       <div class="hero-ctas">
-        <a href="#projects" class="btn btn-primary">View Projects →</a>
-        <a href="Maharshi_Shukla_Resume.pdf" class="btn btn-ghost" download>Download Resume</a>
+        <a href="#projects" class="btn btn-primary" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'});return false;">View Projects →</a>
+        <a href="Maharshi_Shukla_Resume_DS.pdf" class="btn btn-ghost" download>Download Resume</a>
         <div class="resume-dd">
-          <button class="btn btn-ghost" style="cursor:pointer; font-family:inherit;">Get in Touch ⌄</button>
+          <button class="btn btn-ghost" id="git-btn" style="cursor:pointer; font-family:inherit;" onclick="toggleMenu(event)">Get in Touch ⌄</button>
           <div class="resume-menu">
-            <a href="mailto:iamshuklamaharshi@gmail.com">Email</a>
-            <a href="tel:+919265896174">Phone</a>
-            <a href="https://wa.me/919265896174" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="mailto:iamshuklamaharshi@gmail.com">📧 Email Me</a>
+            <a href="tel:+919265896174" onclick="window.location.href='tel:+919265896174'">📞 Call +91 92658 96174</a>
+            <a href="https://wa.me/919265896174" target="_blank" rel="noopener">💬 WhatsApp</a>
           </div>
         </div>
       </div>
       <div class="hero-tags">
         <span><span class="ico">📍</span> Based in Ahmedabad, Gujarat, India</span>
-        <span><span class="ico">🌍</span> Open to: Ahmedabad · Pune · Remote (WFH)</span>
+        <span><span class="ico">🌍</span> Open to: Ahmedabad · Pune · Bangalore · Mumbai · Remote (WFH)</span>
         <span><span class="ico">🎓</span> AI Engineer · Datamites (Completed)</span>
         <span><span class="ico">🏢</span> Data Science &amp; AI Engineering Intern @ Rubixe</span>
       </div>
@@ -546,7 +563,7 @@
           <li>Own the data science lifecycle (ingestion, EDA, feature engineering, modelling, evaluation) across capstone projects, with decision-making authority over model selection and evaluation criteria.</li>
           <li>Built a Random Forest classifier on accelerometer time-series data to distinguish walking from running, reaching <strong style="color:var(--teal)">99.14% accuracy</strong>; evaluated with Grade A.</li>
           <li>Engineered and tuned a Random Forest regression pipeline (GridSearchCV, outlier treatment, categorical encoding) to predict salaries across Texas regions, achieving <strong style="color:var(--violet)">93% accuracy</strong>; evaluated with Grade A.</li>
-          <li>Currently finalising a third capstone project (CNN-based handwritten digit recognition) with a fourth in scoping; selected to independently own an upcoming client project.</li>
+          <li>Completed 4 DS capstone projects (Walk/Run Classifier, Texas Salary Predictor, MNIST Digit Recognition, FIFA 20 Clustering — all evaluated Grade A and deployed); currently working on the <strong style="color:var(--amber)">Bank GoodCredit</strong> DS client project — predicting credit card defaulters on highly imbalanced data using SMOTE, cost-sensitive learning &amp; ensemble methods.</li>
         </ul>
       </div>
 
@@ -657,6 +674,7 @@
         <h3>Professional Skills</h3>
         <span class="tag">// Leadership &amp; Ops</span>
         <ul>
+          <li><strong>Written Communication</strong> — translating complex technical work into clear, compelling language</li>
           <li>Team Leadership</li><li>Decision-Making</li><li>Ownership</li><li>Stakeholder Reporting</li>
           <li>QA Audits</li><li>Dashboard Development</li><li>CRM Workflow</li>
         </ul>
@@ -664,11 +682,13 @@
 
       <div class="skill-card" id="skill-aidir">
         <span class="ic">🧭</span>
-        <h3>AI-Directed Creation</h3>
-        <span class="tag">// Human-AI Collaboration</span>
+        <h3>AI Tool Mastery &amp; Prompt Engineering</h3>
+        <span class="tag">// Human-AI Collaboration · Results-Proven</span>
         <ul>
-          <li>Prompt Engineering</li><li>Claude</li><li>ChatGPT</li><li>Gemini</li><li>Antigravity</li>
+          <li><strong>Advanced Prompt Engineering</strong> — highly compatible with latest AI tools &amp; workflows</li>
+          <li>Claude</li><li>ChatGPT</li><li>Gemini</li><li>Antigravity</li>
           <li>Iterative Prompt Refinement</li><li>AI Image &amp; Video Generation</li>
+          <li>AI-directed software development</li><li>Precise output control via prompting</li>
         </ul>
       </div>
 
@@ -701,6 +721,7 @@
         <h3 id="proj-walkrun">Walk vs. Run Activity Classifier</h3>
         <p>Binary classifier on accelerometer sensor data. Time-series feature engineering with Random Forest &amp; SVM, benchmarked via stratified cross-validation.</p>
         <div class="proj-stack"><span>Python</span><span>scikit-learn</span><span>Random Forest</span><span>SVM</span></div>
+        <a class="proj-live" href="https://walk-run-classification.streamlit.app/" target="_blank" rel="noopener" title="If this link asks you to log in, see the HuggingFace link below"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg> Live Demo ↗</a>
       </div>
 
       <div class="proj-card">
@@ -709,6 +730,7 @@
         <h3 id="proj-salary">Texas Salary Prediction</h3>
         <p>Regression model predicting salaries across Texas regions, using outlier treatment, encoding, and ensemble hyperparameter tuning for robust generalisation.</p>
         <div class="proj-stack"><span>XGBoost</span><span>LightGBM</span><span>GridSearchCV</span></div>
+        <a class="proj-live" href="https://texas-salary-predictor.streamlit.app/" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg> Live Demo ↗</a>
       </div>
 
       <div class="proj-card">
@@ -717,22 +739,25 @@
         <h3 id="proj-netflix">Netflix Content Recommendation System</h3>
         <p>Content-based filtering engine using TF-IDF vectorisation &amp; cosine similarity on genres, cast, and descriptions to surface ranked recommendations.</p>
         <div class="proj-stack"><span>Python</span><span>scikit-learn</span><span>Pandas</span></div>
+        <a class="proj-live" href="https://netflix-recommendation-ms.streamlit.app/" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg> View Project ↗</a>
       </div>
 
       <div class="proj-card">
-        <div class="proj-top"><span class="proj-status status-progress">FINALISING</span></div>
+        <div class="proj-top"><span class="proj-status status-done">EVALUATED · GRADE A</span></div>
         <div class="proj-metric">CNN</div>
         <h3 id="proj-mnist">Handwritten Digit Recognition (MNIST)</h3>
         <p>CNN for 0–9 digit classification using convolution, pooling, batch normalisation and dropout regularisation.</p>
         <div class="proj-stack"><span>TensorFlow</span><span>Keras</span><span>CNN</span></div>
+        <a class="proj-live" href="https://mnist-handwritten-digit-recognizer.streamlit.app/" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg> Live Demo ↗</a>
       </div>
 
       <div class="proj-card">
-        <div class="proj-top"><span class="proj-status status-progress">IN SCOPING</span></div>
+        <div class="proj-top"><span class="proj-status status-done">EVALUATED · GRADE A</span></div>
         <div class="proj-metric">K-Means</div>
         <h3 id="proj-fifa">FIFA 20 Player Selection Model</h3>
         <p>Clustering on player attributes for role-fit profiling, with ranking metrics and visualisations for squad optimisation.</p>
         <div class="proj-stack"><span>scikit-learn</span><span>K-Means</span><span>Matplotlib</span></div>
+        <a class="proj-live" href="https://fifa20clustering.streamlit.app/" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg> Live Demo ↗</a>
       </div>
 
       <div class="proj-card">
@@ -746,7 +771,7 @@
       <div class="proj-card">
         <div class="proj-top"><span class="proj-status status-progress">DEMO ON REQUEST</span></div>
         <div class="proj-metric">AI-Directed</div>
-        <h3 id="proj-film">AI-Generated Short Action Film</h3>
+        <h3 id="proj-film">AI-Generated Short Fiction Film</h3>
         <p>Directed a realistic short action/superhero film end to end purely through prompting: sequencing many generated images into a coherent, consistent narrative and getting precise, intended results from the model at each step. Alongside this, I regularly run smaller prompting explorations on personal-interest topics, refining prompts until the output matches what I actually had in mind.</p>
         <div class="proj-stack"><span>Claude</span><span>ChatGPT</span><span>Gemini</span><span>Antigravity</span></div>
       </div>
@@ -812,13 +837,26 @@
             <span class="ic">🐙</span>
             <div><div class="lbl">GITHUB</div><div class="val">mgshukla007-cmd</div></div>
           </a>
+          <a class="contact-link" href="https://huggingface.co/maharshishukla" target="_blank" rel="noopener">
+            <span class="ic">🤗</span>
+            <div><div class="lbl">HUGGING FACE</div><div class="val">maharshishukla</div></div>
+          </a>
         </div>
       </div>
       <form class="msg" action="mailto:iamshuklamaharshi@gmail.com" method="post" enctype="text/plain">
-        <input type="text" name="Name" placeholder="Your name" required>
-        <input type="text" name="Company" placeholder="Company & role">
-        <input type="email" name="Email" placeholder="Your email" required>
-        <textarea name="Message" placeholder="Message" required></textarea>
+        <p class="form-title">✉ Leave Your Details Here</p>
+        <input type="text" name="Name" placeholder="Your name *" required>
+        <input type="text" name="Company" placeholder="Company &amp; role *" required>
+        <input type="email" name="Email" placeholder="Your email *" required>
+        <select name="BestTime" required>
+          <option value="" disabled selected>Best time to contact *</option>
+          <option value="Morning (9am-12pm IST)">Morning (9am–12pm IST)</option>
+          <option value="Afternoon (12pm-4pm IST)">Afternoon (12pm–4pm IST)</option>
+          <option value="Evening (4pm-8pm IST)">Evening (4pm–8pm IST)</option>
+          <option value="Anytime">Anytime works</option>
+        </select>
+        <textarea name="Message" placeholder="Your message *" required></textarea>
+        <input type="text" name="Address" placeholder="Your address / location (optional)">
         <button type="submit">Send Message →</button>
       </form>
     </div>
@@ -832,6 +870,7 @@
       <a href="https://www.linkedin.com/in/er-maharshi-shukla-714750343/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
       <a href="https://github.com/mgshukla007-cmd" target="_blank" rel="noopener" aria-label="GitHub">gh</a>
       <a href="mailto:iamshuklamaharshi@gmail.com" aria-label="Email">@</a>
+      <a href="https://huggingface.co/maharshishukla" target="_blank" rel="noopener" aria-label="HuggingFace">🤗</a>
     </div>
   </div>
 </footer>
@@ -839,7 +878,7 @@
 <div id="guide">
   <div id="guide-panel">
     <span class="close-x" id="guide-close">✕</span>
-    <p id="guide-greet">Hi, I'm here to help you explore. Type a skill or topic below and I'll take you straight to it.</p>
+    <p id="guide-greet">Hi, I'm here to help you explore. Type a skill or topic below and I'll try to locate it for you!</p>
     <div id="guide-search">
       <input type="text" id="guide-input" placeholder="e.g. leadership, Python, CSAT...">
       <button id="guide-go" type="button">Find</button>
@@ -847,7 +886,7 @@
     <div id="guide-result"></div>
     <div id="guide-quicklinks">
       <a href="#contact">Get in Touch</a>
-      <a href="Maharshi_Shukla_Resume.pdf" download>Download Resume</a>
+      <a href="Maharshi_Shukla_Resume_DS.pdf" download>Download Resume</a>
     </div>
   </div>
   <div id="guide-bubble"></div>
@@ -945,6 +984,7 @@
       { id:'proj-netflix', label:'Netflix Recommendation System', kws:['netflix','recommendation','recommender','tf-idf','cosine similarity'] },
       { id:'proj-mnist', label:'MNIST Digit Recognition project', kws:['mnist','digit','cnn project','handwriting'] },
       { id:'proj-fifa', label:'FIFA 20 Player Model project', kws:['fifa','kmeans','k-means','player','clustering project'] },
+      { id:'contact', label:'HuggingFace profile', kws:['huggingface','hugging face','hf','spaces','models'] },
       { id:'proj-appscalc', label:'Interactive Apps & Calculator', kws:['calculator','quiz','web app','scientific calculator'] },
       { id:'proj-film', label:'AI-Generated Short Film', kws:['film','movie','video','superhero','action film','ai video'] },
       { id:'edu-datamites', label:'Education · Datamites AI Engineering', kws:['datamites','ai engineer certification','education','course'] },
@@ -967,7 +1007,7 @@
       if(query === 'resume' || query === 'cv' || query === 'download resume'){
         resultEl.textContent = 'Opening your resume download...';
         const a = document.createElement('a');
-        a.href = 'Maharshi_Shukla_Resume.pdf'; a.download = ''; document.body.appendChild(a); a.click(); a.remove();
+        a.href = 'Maharshi_Shukla_Resume_DS.pdf'; a.download = ''; document.body.appendChild(a); a.click(); a.remove();
         return;
       }
       let best = null, bestScore = 0;
@@ -1087,7 +1127,7 @@
     setTimeout(() => {
       if(userInteracted) return;
       wave();
-      showBubble('Hi, I\'m here if you\'d like a hand exploring. Try the search below, or jump to <a href="#contact">Get in Touch</a> / <a href="Maharshi_Shukla_Resume.pdf" download>Download Resume</a>.', 9000);
+      showBubble('Hi, I\'m here to help! Try the search below, or jump to <a href="#contact">Get in Touch</a> / <a href="Maharshi_Shukla_Resume_DS.pdf" download>Download Resume</a>.', 9000);
     }, 3500);
 
     /* ---- engagement nudge (time-on-page), fires once ---- */
@@ -1102,7 +1142,32 @@
       }
     }, 1000);
   })();
-</script>
+
+
+    /* ---- mobile-friendly Get in Touch dropdown ---- */
+    function toggleMenu(e){
+      e.stopPropagation();
+      const menu = document.querySelector('.resume-menu');
+      menu.classList.toggle('open');
+    }
+    document.addEventListener('click', function(e){
+      const dd = document.querySelector('.resume-dd');
+      if(dd && !dd.contains(e.target)){
+        const menu = document.querySelector('.resume-menu');
+        if(menu) menu.classList.remove('open');
+      }
+    });
+
+    /* ---- occasional idle bubble (fires once, not too frequent) ---- */
+    let idleFired = false;
+    setTimeout(function(){
+      if(!idleFired){
+        idleFired = true;
+        showBubble("I'm here to help! 👋 Feel free to explore or use the search.", 5000);
+      }
+    }, 45000);
+
+  </script>
 </body>
 
 </html>
