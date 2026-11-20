@@ -1785,7 +1785,7 @@
           localStorage.setItem('resume_downloads', JSON.stringify(log.slice(-100)));
         }catch(e){}
         const a = document.createElement('a');
-        a.href = 'resumes/' + b.dataset.file; a.download = b.dataset.file;
+        a.href = b.dataset.file; a.download = b.dataset.file;
         document.body.appendChild(a); a.click(); a.remove();
         closeResumePicker();
       });
